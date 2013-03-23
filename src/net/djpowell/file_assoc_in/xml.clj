@@ -1,18 +1,15 @@
 (ns net.djpowell.file-assoc-in.xml
   "An implementation of file-assoc-in that preserves lexical features
   such as comments and formatting"
-  (:import
-   (java.io StringReader StringWriter)
-   (javax.xml.transform Transformer TransformerFactory)
-   (javax.xml.transform.stream StreamSource StreamResult))
-  (:require
-   [clojure.java.io :as io]
-   [clojure.string :as str]
-   [net.cgrand.sjacket :as sj]
-   [net.cgrand.sjacket.parser :as jp]
-   [net.cgrand.enlive-html :as html])
-  (:use
-   [net.djpowell.file-assoc-in.util]))
+  (:import (java.io StringReader StringWriter)
+           (javax.xml.transform Transformer TransformerFactory)
+           (javax.xml.transform.stream StreamSource StreamResult))
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
+            [net.cgrand.sjacket :as sj]
+            [net.cgrand.sjacket.parser :as jp]
+            [net.cgrand.enlive-html :as html])
+  (:use [net.djpowell.file-assoc-in.util]))
 
 ;; yes... this is a fairly ridiculous method of transforming clojure,
 ;; but doing sibling selection with clojure tools was difficult, and it works

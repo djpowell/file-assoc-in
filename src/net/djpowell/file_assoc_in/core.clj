@@ -1,12 +1,9 @@
 (ns net.djpowell.file-assoc-in.core
-  (:gen-class)
-  (:require
-   [clojure.java.io :as io])
-  (:require
-    [net.djpowell.file-assoc-in.xml :as xml]
-    [net.djpowell.file-assoc-in.simple :as simple])
-  (:use
-   [net.djpowell.file-assoc-in.util]))
+  (:gen-class )
+  (:require [clojure.java.io :as io])
+  (:require [net.djpowell.file-assoc-in.xml :as xml]
+            [net.djpowell.file-assoc-in.simple :as simple])
+  (:use [net.djpowell.file-assoc-in.util]))
 
 (defn -main
   "Permanently update a file containing a nested Clojure map, by setting

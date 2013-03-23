@@ -1,9 +1,8 @@
 (ns net.djpowell.file-assoc-in.simple
   "A simple implementation of file-assoc-in that doesn't
   preserve lexical features"
-  (:use
-   [net.djpowell.file-assoc-in.util]))
-  
+  (:use [net.djpowell.file-assoc-in.util]))
+
 (defn emit-str
   [d]
   (with-out-str

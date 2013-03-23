@@ -1,11 +1,9 @@
 (ns net.djpowell.file-assoc-in.util
-  (:import
-   (java.io File))
-  (:require
-   [clojure.java.io :as io]
-   [clojure.walk :as walk]
-   [clojure.pprint :as pp]
-   ))
+  (:import (java.io File))
+  (:require [clojure.java.io :as io]
+            [clojure.walk :as walk]
+            [clojure.pprint :as pp]
+            ))
 
 (defn println-err
   "println to stderr"
@@ -26,7 +24,7 @@
     (System/exit exit-code)))
 
 
-    (defn read-str
+(defn read-str
   [s nm]
   (try
     (binding [*read-eval* nil]
