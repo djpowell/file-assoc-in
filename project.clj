@@ -1,6 +1,6 @@
 (defproject net.djpowell/file-assoc-in "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :description "Utility for updating clojure data files containing maps (such as leiningen profiles), without losing comments and lexical layout"
+  :url "https://github.com/djpowell/file-assoc-in"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :main net.djpowell.file-assoc-in.core

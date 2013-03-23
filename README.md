@@ -1,10 +1,10 @@
 # file-assoc-in
 
-A Clojure library designed to ... well, that part is up to you.
+Utility for updating clojure data files containing maps (such as leiningen profiles), without losing comments and lexical layout.
 
 ## Usage
 
-FIXME
+`lein run "C:\Users\Dave\.lein\profiles.clj" "[:user :java-cmd]" "c:\jdk\bin\java.exe"`
 
 ## License
 
