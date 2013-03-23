@@ -8,4 +8,6 @@
                   [org.clojure/clojure "1.5.1"]
                   [enlive "1.1.1"]
                   [org.clojars.djpowell/sjacket "0.1.0.3"]
-                  ])
+                  ]
+  :profiles {:test {:resource-paths ["test-resources"]}}
+  )
