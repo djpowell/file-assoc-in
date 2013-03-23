@@ -1,11 +1,17 @@
 (ns net.djpowell.file-assoc-in
   (:gen-class)
   (:import
-   (java.io File))
+   (java.io File StringReader StringWriter)
+   (javax.xml.transform Transformer TransformerFactory)
+   (javax.xml.transform.stream StreamSource StreamResult))
   (:require
    [clojure.java.io :as io]
+   [clojure.string :as str]
    [clojure.pprint :as pp]
    [clojure.walk :as walk]
+   [net.cgrand.sjacket :as sj]
+   [net.cgrand.sjacket.parser :as jp]
+   [net.cgrand.enlive-html :as html]
    ))
 
 (defn read-str
@@ -45,7 +51,6 @@
       (finally
         (when (.exists tempfile)
           (.delete tempfile))))))
-
 
 (defn intern-regexps
   "Identical regexps read from two files aren't interned, and aren't
@@ -93,7 +98,55 @@
    (or (io/file (System/getenv "LEIN_HOME"))
        (io/file (System/getProperty "user.home") ".lein"))))
 
+; start xml stuff
+
+(defn clojure-as-xml
+  [clj-str]
+  (apply str (html/emit* (jp/parser clj-str))))
+
+(defn xml-as-clojure-str
+  [s]
+  (sj/str-pt (first (html/xml-resource (java.io.StringReader. s)))))
+
+(defn transform-string
+  [xsl-path xml-s & params]
+  (let [factory (TransformerFactory/newInstance)
+        xsl (StreamSource. (io/input-stream (io/resource xsl-path)))
+        transformer (.newTransformer factory xsl)
+        param-kvs (apply hash-map params)
+        _ (doseq [[k v] param-kvs]
+            (.setParameter transformer k v))
+        xml (StreamSource. (StringReader. xml-s))
+        str-out (StringWriter.)
+        out (StreamResult. str-out)]
+    (.transform transformer xml out)
+    (.toString str-out)))
+
+(defn has-crs
+  [in-str]
+  (some #(= \return %) in-str))
+
+(defn strip-crs
+  [in-str]
+  (str/replace in-str "\r" ""))
+
+(defn add-back-crs
+  [in-str]
+  (str/replace in-str "\r" ""))
+
+(defn lex-file-assoc-in
+  [f ks v]
+  (let [clj-in (slurp f :encoding "utf-8")
+        use-crs (has-crs clj-in)
+        clj-in (strip-crs clj-in)
+        xml-in (clojure-as-xml clj-in)
+        xml-out (transform-string "update-profiles.xsl" xml-in "value" (pr-str v))
+        clj-out (xml-as-clojure-str xml-out)
+        clj-out (if use-crs (add-back-crs clj-out) clj-out)]
+    (validate-change clj-in clj-out ks v)
+    (safely-update-file f clj-out)))
+
 (defn -main
   "I don't do a whole lot."
   []
-  (simple-file-assoc-in (io/file (lein-home-path) "profiles.clj") [:user :java-cmd] "c:\\jdk\\bin\\java.exe"))
+  (lex-file-assoc-in (io/file (lein-home-path) "profiles.clj") [:user :java-cmd] "c:\\jdk\\bin\\java.exe"))
