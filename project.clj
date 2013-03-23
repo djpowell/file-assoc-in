@@ -1,4 +1,4 @@
-(defproject net.djpowell/file-assoc-in "0.1.0-SNAPSHOT"
+(defproject net.djpowell/file-assoc-in "0.1.0"
   :description "Utility for updating clojure data files containing maps (such as leiningen profiles), without losing comments and lexical layout"
   :url "https://github.com/djpowell/file-assoc-in"
   :license {:name "Eclipse Public License"
