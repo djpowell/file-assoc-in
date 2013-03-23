@@ -75,6 +75,12 @@
                 <xsl:message>insert-user-profile</xsl:message>
                 <xsl:apply-templates mode="insert-user-profile" />
             </xsl:when>
+            <xsl:when test="not(/root/node())">
+                <xsl:message>empty-file</xsl:message>
+                <root>
+                    <xsl:call-template name="insert-profile-map" />
+                </root>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:message>insert-profile-map</xsl:message>
                 <xsl:apply-templates mode="insert-profile-map" />

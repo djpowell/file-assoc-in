@@ -1,5 +1,5 @@
 (ns net.djpowell.file-assoc-in.util
-  (:import (java.io File))
+  (:import (java.io File PushbackReader StringReader))
   (:require [clojure.java.io :as io]
             [clojure.walk :as walk]
             [clojure.pprint :as pp]
@@ -28,7 +28,9 @@
   [s nm]
   (try
     (binding [*read-eval* nil]
-      (read-string s))
+      (with-open [sin (java.io.StringReader. s)
+                  in (java.io.PushbackReader. sin)]
+        (read in false nil)))
     (catch Exception e
       (throw (ex-info "Failed to read data" {:s s :name nm} e)))))
 
@@ -51,7 +53,8 @@
 (defn validate-change
   [oldtext newtext ks v]
   (when-not (pos? (count newtext))
-    (throw (ex-info "New version is empty" {:newtext newtext})))
+    (when (pos? (count oldtext))
+      (throw (ex-info "New version is empty" {:newtext newtext}))))
   (when-not (seq ks)
     (throw (ex-info "Keys are empty" {:ks ks})))
   (let [old-data (read-str oldtext "old")
